@@ -196,6 +196,43 @@ public class adminController implements Initializable {
 
     }//deleteStudent
 
+    @FXML
+    private void saveStudent(ActionEvent event){
+        StudentData std = studentTable.getSelectionModel().getSelectedItem();
+        //DialogMessage
+        JOptionPane.showConfirmDialog(null,
+                "Do you want to update student ID: "
+                        + std.getId());
+        String sqlUpdate = "update student set firstName = ?," +
+                "lastName = ?,email = ?, DOB = ? where ID = ?";
+        try {
+            Connection conn = dbConnection.getConnection();
+            PreparedStatement pr = conn.prepareStatement(sqlUpdate);
+            pr.setString(1,this.txtFirstName.getText());
+            pr.setString(2,this.txtLastName.getText());
+            pr.setString(3,this.txtEmail.getText());
+            pr.setString(4, this.txtDOB.getEditor().getText());
+            pr.setString(5,this.txtID.getText());
+
+            pr.executeUpdate();
+            pr.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        loadStudentData(new ActionEvent());
+
+
+    }//saveStudent
+    @FXML
+    private void logOut(ActionEvent event) throws Exception {
+        ((Node)event.getSource()).getScene().getWindow().hide();
+        Stage primaryStage = new Stage();
+        Main m = new Main();
+        m.start(primaryStage);
+
+    }//logOut
+
 
 
 
